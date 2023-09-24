@@ -179,7 +179,9 @@ class LoadCaption(object):
 
     def __call__(self, data):
         idx_img = data['idx_img']
-        key, str_cap = self.tsv[idx_img]
+        str_cap = self.tsv.__getitem__(idx_img)
+        print("----------------str_cap: ",str_cap)
+
         # assert key == data['key']
         caps = json.loads(str_cap)
         idx_cap = data['idx_cap']

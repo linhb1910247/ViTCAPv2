@@ -39,12 +39,16 @@ class CaptionIdxTSVDataset(object):
         self.caption_version = caption_version
         num_cap_tsv = TSVSplitProperty(data,
                                        split,
-                                       'num_caption',
+                                       'label',
                                        version=caption_version,
                                        )
 
         # store the # of captions per image
-        num_caps = [(key, int(n)) for key, n in num_cap_tsv]
+        num_caps = []
+        len_data = num_cap_tsv.num_rows()
+        for index in range(len_data):
+          value = num_cap_tsv.__getitem__(index)
+          num_caps.append((value,5))
 
         # construct a triplet <image-text key, image key, caption key>
         self.k_img_cap = [(k, idx_img, idx_cap) for idx_img, (k, n) in enumerate(num_caps)
