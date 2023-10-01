@@ -95,11 +95,12 @@ class LoadLabel(object):
 
     def __call__(self, data):
         idx_img = data['idx_img']
-        key, str_label = self.label_tsv[idx_img]
-        rects = json.loads(str_label)
+        print(self.label_tsv[idx_img])
+        key = self.label_tsv[idx_img]
+        # rects = json.loads(str_label)
 
         assert self.out_key not in data
-        data[self.out_key] = rects
+        # data[self.out_key] = rects
         return data
 
 
@@ -180,13 +181,13 @@ class LoadCaption(object):
     def __call__(self, data):
         idx_img = data['idx_img']
         str_cap = self.tsv.__getitem__(idx_img)
-        print("----------------str_cap: ",str_cap)
+        print("----------------str_cap line: ",str_cap[0])
 
         # assert key == data['key']
-        caps = json.loads(str_cap)
-        idx_cap = data['idx_cap']
-        cap = caps[idx_cap]
-        data['caption'] = cap
+        # caps = json.loads(int(str_cap[0]))
+        # idx_cap = data['idx_cap']
+        # cap = caps[idx_cap]
+        data['caption'] = str_cap[0]
         return data
 
     def get_captions_by_key(self, img_idx):
@@ -249,7 +250,9 @@ class IdentifyTextAB(object):
             caption = caption_dict['caption']
             data['text_ab_type'] = 'cap_label'
         else:
-            raise NotImplementedError
+            caption = ''
+            data['text_ab_type'] = 'empty_label'
+            # raise NotImplementedError
         data['text_a'] = caption
         data['text_b'] = od_labels
         return data

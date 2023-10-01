@@ -299,7 +299,10 @@ class TSVFile(object):
 
             # with limited_retry_agent(10, open, self.lineidx, 'r') as fp:
             with exclusive_open_to_read(self.lineidx) as fp:
-                self._lineidx = tuple([int(i.strip()) for i in fp.readlines()])
+                temp =fp.readlines()
+                print('-----------------------------------------')
+                print(temp)
+                self._lineidx = tuple([int(i.strip()) for i in temp])
 
             # Comment this as its keep POPPING UP WHICH MADE ME CRAZY! FUUUUCK!
             logging.info('loaded {} from {}'.format(

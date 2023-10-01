@@ -16,11 +16,17 @@ class DatasetPlusTransform(Dataset):
     def __getitem__(self, idx_info):
 
         # local debugging
-        # idx_info = random.randint(0, 1000)
+        idx_info = random.randint(0, 100)
 
         data_dict = self.dataset[idx_info]
+        print('---------------------')
+        print(data_dict)
         if self.transform is not None:
+            print('---------------------1')
+
             data_dict = self.transform(data_dict)
+            print('---------------------2')
+
         return data_dict
 
     def __repr__(self):
@@ -760,14 +766,20 @@ class Tensorizer(object):
 
     def __call__(self, data):
 
-        if 'objects' in data['label']:
-            labels = data['label']['objects']
+        print('-----------------tensorizer')
+        print(data)
+        print('-----------------tensorizer end')
+
+        if 'objects' in data['caption']:
+            labels = data['caption']
 
         else:
-            labels = data['label']
+            labels = data['caption']
 
         if 'caption' in data.keys():
-            x = self.tensorizer.tensorize(labels, data['caption']['caption'])
+            # print(data['caption']['caption'])
+            # x = self.tensorizer.tensorize(labels, data['caption']['caption'])
+            x = self.tensorizer.tensorize(labels)
         else:
             x = self.tensorizer.tensorize(labels)
 
@@ -793,11 +805,13 @@ class CaptionTaggerTensorizer(object):
 
         if not self.caption_only:
             for tag in labels:
-                token = tag['class']
-                if tag['conf'] >= self.threshold:
-                    for t in token.split(' '):
-                        cls = self.bert_tokenizer.convert_tokens_to_ids(t)
-                        label_tensor[cls] = 1
+                print('------------------------tag',tag)
+                # token = tag['class']
+                token = tag
+                # if tag['conf'] >= self.threshold:
+                #     for t in token.split(' '):
+                #         cls = self.bert_tokenizer.convert_tokens_to_ids(t)
+                #         label_tensor[cls] = 1
 
         # supplement labels with extra tags from the caption
         if caption is not None:
